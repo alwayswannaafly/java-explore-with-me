@@ -1,6 +1,7 @@
 package ru.practicum.controller;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -13,13 +14,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping
+@RequiredArgsConstructor
 public class StatsController {
 
     private final StatsService statsService;
-
-    public StatsController(StatsService statsService) {
-        this.statsService = statsService;
-    }
 
     @PostMapping("/hit")
     @ResponseStatus(HttpStatus.CREATED)
