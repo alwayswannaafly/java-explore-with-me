@@ -1,14 +1,41 @@
 services:
   stats-server:
+    build:
+      context: ./stat-svc/stat-svc-service
     ports:
       - "9090:9090"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://stats-db:5432/statdb
+      SPRING_DATASOURCE_USERNAME: statuser
+      SPRING_DATASOURCE_PASSWORD: statpass
+      SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
+    depends_on:
+      - stats-db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9090/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   stats-db:
     image: postgres:16.1
+    environment:
+      POSTGRES_DB: statdb
+      POSTGRES_USER: statuser
+      POSTGRES_PASSWORD: statpass
+    ports:
+      - "5433:5432"
+    volumes:
+      - stats_db_data:/var/lib/postgresql/data
 
   ewm-service:
+    image: alpine:latest
+    command: sleep infinity
     ports:
       - "8080:8080"
 
   ewm-db:
     image: postgres:16.1
+
+volumes:
+  stats_db_data:
