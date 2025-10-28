@@ -1,0 +1,13 @@
+spring:
+  jackson:
+    date-format: "yyyy-MM-dd HH:mm:ss"
+    time-zone: UTC
+  sql:
+    init:
+      mode: always
+  jpa:
+    hibernate:
+      ddl-auto: validate
+stats:
+  client:
+    base-url=http://stats-service:9090:
