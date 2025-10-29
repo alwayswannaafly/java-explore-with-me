@@ -36,18 +36,10 @@ public class PublicEventService {
     private final StatsClient statsClient;
     private final StatsService statsService;
 
-    public void saveHitForPublicSearch(HttpServletRequest request) {
-        saveHit("/", request);
-    }
-
-    public void saveHitForEvent(Long eventId, HttpServletRequest request) {
-        saveHit("/events/" + eventId, request);
-    }
-
-    private void saveHit(String uri, HttpServletRequest request) {
+    public void saveHit(HttpServletRequest request) {
         EndpointHit hit = new EndpointHit();
         hit.setApp("ewm-main-service");
-        hit.setUri(uri);
+        hit.setUri(request.getRequestURI());
         hit.setIp(request.getRemoteAddr());
         hit.setTimestamp(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         statsClient.saveHit(hit);

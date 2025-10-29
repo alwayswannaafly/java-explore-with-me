@@ -32,7 +32,7 @@ public class PublicEventController {
             @RequestParam(defaultValue = "10") @Positive Integer size,
             HttpServletRequest request) {
 
-        publicEventService.saveHitForPublicSearch(request);
+        publicEventService.saveHit(request);
 
         return publicEventService.getPublicEvents(
                 text, categories, paid, rangeStart, rangeEnd,
@@ -45,7 +45,7 @@ public class PublicEventController {
             @PathVariable Long id,
             HttpServletRequest request) {
 
-        publicEventService.saveHitForEvent(id, request);
+        publicEventService.saveHit(request);
 
         return publicEventService.getPublicEventById(id);
     }
