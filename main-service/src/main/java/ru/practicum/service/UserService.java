@@ -3,6 +3,7 @@ package ru.practicum.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.dto.user.NewUserDto;
 import ru.practicum.dto.user.UserDto;
 import ru.practicum.exception.ConflictException;
@@ -15,9 +16,11 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
 
+    @Transactional
     public UserDto createUser(NewUserDto userDto) {
         if (userRepository.existsUserByEmail(userDto.getEmail())) {
             throw new ConflictException("User with email " + userDto.getEmail() + " already exists");
@@ -39,6 +42,7 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void deleteUser(Long id) {
         userRepository.deleteById(id);
     }

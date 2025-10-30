@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CategoryService {
 
     private final CategoryRepository categoryRepository;
@@ -34,6 +35,7 @@ public class CategoryService {
         return CategoryMapper.toCategoryDto(saved);
     }
 
+    @Transactional
     public CategoryDto updateCategory(NewCategoryDto newCategoryDto, Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category with id=" + id + " not found"));
@@ -49,6 +51,7 @@ public class CategoryService {
         return CategoryMapper.toCategoryDto(saved);
     }
 
+    @Transactional
     public void deleteCategory(Long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Category with id=" + id + " not found"));

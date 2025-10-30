@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.client.StatsClient;
 import ru.practicum.dto.EndpointHit;
 import ru.practicum.dto.event.EventFullDto;
@@ -30,12 +31,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PublicEventService {
     private final RequestRepository requestRepository;
     private final EventRepository eventRepository;
     private final StatsClient statsClient;
     private final StatsService statsService;
 
+    @Transactional
     public void saveHit(HttpServletRequest request) {
         EndpointHit hit = new EndpointHit();
         hit.setApp("ewm-main-service");

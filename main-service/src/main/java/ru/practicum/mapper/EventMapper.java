@@ -1,5 +1,6 @@
 package ru.practicum.mapper;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.dto.event.EventFullDto;
 import ru.practicum.dto.event.EventShortDto;
 import ru.practicum.dto.event.NewEventDto;
@@ -7,21 +8,22 @@ import ru.practicum.model.Category;
 import ru.practicum.model.User;
 import ru.practicum.model.event.Event;
 
+@UtilityClass
 public class EventMapper {
 
     public static Event toEvent(NewEventDto dto, User initiator, Category category) {
-        return Event.builder()
-                .title(dto.getTitle())
-                .annotation(dto.getAnnotation())
-                .description(dto.getDescription())
-                .eventDate(dto.getEventDate())
-                .location(dto.getLocation())
-                .paid(dto.getPaid())
-                .participantLimit(dto.getParticipantLimit())
-                .requestModeration(dto.getRequestModeration())
-                .initiator(initiator)
-                .category(category)
-                .build();
+        Event event = new Event();
+        event.setTitle(dto.getTitle());
+        event.setDescription(dto.getDescription());
+        event.setCategory(category);
+        event.setAnnotation(dto.getAnnotation());
+        event.setEventDate(dto.getEventDate());
+        event.setLocation(dto.getLocation());
+        event.setPaid(dto.getPaid());
+        event.setParticipantLimit(dto.getParticipantLimit());
+        event.setRequestModeration(dto.getRequestModeration());
+        event.setInitiator(initiator);
+        return event;
     }
 
     public static EventFullDto toEventFullDto(Event event, long views, long confirmedRequests) {

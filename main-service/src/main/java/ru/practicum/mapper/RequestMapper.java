@@ -1,10 +1,12 @@
 package ru.practicum.mapper;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.dto.request.ParticipationRequestDto;
 import ru.practicum.model.Request;
 
 import java.time.format.DateTimeFormatter;
 
+@UtilityClass
 public class RequestMapper {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
