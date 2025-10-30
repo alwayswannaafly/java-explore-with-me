@@ -4,13 +4,13 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import ru.practicum.dto.EndpointHit;
 import ru.practicum.dto.ViewStats;
 
 import java.net.URI;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,7 +18,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
 public class StatsClientImpl implements StatsClient {
 
     private final RestTemplate restTemplate;
@@ -42,20 +41,19 @@ public class StatsClientImpl implements StatsClient {
 
     @Override
     public List<ViewStats> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+        String startStr = start.format(FORMATTER);
+        String endStr = end.format(FORMATTER);
+
+        String encodedStart = URLEncoder.encode(startStr, StandardCharsets.UTF_8);
+        String encodedEnd = URLEncoder.encode(endStr, StandardCharsets.UTF_8);
+
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + "/stats")
-                .queryParam("start", start.format(FORMATTER))
-                .queryParam("end", end.format(FORMATTER));
+                .queryParam("start", encodedStart)
+                .queryParam("end", encodedEnd);
 
         if (uris != null && !uris.isEmpty()) {
-            // URIs нужно закодировать, как сказано в ТЗ
             String encodedUris = uris.stream()
-                    .map(uri -> {
-                        try {
-                            return java.net.URLEncoder.encode(uri, StandardCharsets.UTF_8);
-                        } catch (Exception e) {
-                            throw new RuntimeException("Failed to encode URI: " + uri, e);
-                        }
-                    })
+                    .map(uri -> URLEncoder.encode(uri, StandardCharsets.UTF_8))
                     .collect(Collectors.joining(","));
             builder.queryParam("uris", encodedUris);
         }
